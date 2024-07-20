@@ -1,0 +1,368 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>酒店预订单 - Bill Book</title>
+    <script src="https://cdn.staticfile.net/jquery/3.7.1/jquery.min.js"></script> 
+<style>
+    /* 样式可根据需要自行调整 */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        margin-left: 30px;
+        margin-top: 10px;
+    }
+    h2 {
+        margin-bottom: 5px;
+    }
+    button {
+        padding: 3px;
+    }
+
+    label {
+        display: inline-block;
+        width: 150px;
+        margin-bottom: 5px;
+    }
+    input[type="text"],
+    input[type="date"],
+    input[type="number"],
+    textarea {
+        width: 300px;
+        padding: 5px;
+        margin-bottom: 5px;
+    }
+    input[type="submit"] {
+        width: auto;
+        padding: 10px 20px;
+        cursor: pointer;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        margin-left:250px;
+    }
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    form#billForm {
+        width: 500;
+        height: 680;
+    }
+
+    #all {
+        display: flex;
+        flex-grow: 1;
+        margin-bottom: 20px;
+        margin-top: 20px
+    }
+
+    #left {
+        margin: 0 auto;
+    }
+
+    #right {
+        display: flex;
+        flex-direction: column;
+        margin: 0 auto;
+        justify-content: space-around;
+        height: 680px;
+    }
+    .item {
+        flex-flow: 1;
+    }
+
+    /* 表格样式 */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+    margin-top: 50px;
+}
+
+/* 表头样式 */
+.table th {
+    padding: 8px;
+    text-align: left;
+    background-color: #f2f2f2;
+    border: 1px solid #ddd;
+}
+
+/* 单元格样式 */
+.table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+/* 奇数行背景色 */
+.table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+/* 悬停样式 */
+.table tbody tr:hover {
+    background-color: #f2f2f2;
+}
+
+#update {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+#updateSub {
+    margin: 0 auto;
+    padding: 10px;
+}
+</style>
+</head>
+
+<body>
+<div id = 'all'>
+    <div id = 'left'>
+        <h2>Item1：预订Order(增)</h2>
+        <form id="billForm" method="post">
+        <label for="BookID">预订单号(不填):</label>
+        <input type="text" id="BookID" name="BookID" ><br>
+
+        <label for="BookPerson">预订人*:</label>
+        <input type="text" id="BookPerson" name="BookPerson" required=""><br>
+
+        <label for="CertiCardName">证件名*:</label>
+        <input type="text" id="CertiCardName" name="CertiCardName" required=""><br>
+
+        <label for="CertiCardID">证件号*:</label>
+        <input type="text" id="CertiCardID" name="CertiCardID" required=""><br>
+
+        <label for="Telephone">联系电话*:</label>
+        <input type="text" id="Telephone" name="Telephone" required=""><br>
+
+        <label for="RoomType">客房类型*:</label>
+        <input type="text" id="RoomType" name="RoomType" required=""><br>
+
+        <label for="InRoomDate">抵店日期*:</label>
+        <input type="date" id="InRoomDate" name="InRoomDate" required=""><br>
+
+        <label for="OutRoomDate">离店日期:</label>
+        <input type="date" id="OutRoomDate" name="OutRoomDate" ><br>
+
+        <label for="InPersonNum">入住人数:</label>
+        <input type="number" id="InPersonNum" name="InPersonNum" value="1"><br>
+
+        <label for="RoomNum">客房数*:</label>
+        <input type="number" id="RoomNum" name="RoomNum" required=""><br>
+
+        <label for="RoomPrice">客房单价:</label>
+        <input type="number" id="RoomPrice" name="RoomPrice" value="999"><br>
+
+        <label for="Discount">折扣:</label>
+        <input type="number" id="Discount" name="Discount" value="0.88"><br>
+
+        <label for="PrePayment">预收款:</label>
+        <input type="number" id="PrePayment" name="PrePayment" value="99"><br>
+
+        <label for="SpecialRequire">特殊要求:</label>
+        <textarea id="SpecialRequire" name="SpecialRequire" rows="4"></textarea><br>
+
+        <label for="Pic_pay">电子凭证:</label>
+        <input type="text" id="Pic_pay" name="Pic_pay" value="20244221958"><br>
+
+        <label for="Operator">操作员:</label>
+        <input type="text" id="Operator" name="Operator" value="陈子陵"><br>
+
+        <label for="DateBook">预订日期:</label>
+        <input type="date" id="DateBook" name="DateBook" ><br>
+
+        <label for="IsAgree">定金退还(YES/NO)*:</label>
+        <input type="text" id="IsAgree" name="IsAgree" required=""><br>
+
+        <input type="submit" value="提交">
+    </form>
+    </div>
+
+    <div id = 'right'>
+        <div id="select" class="item">
+            <h2 >Item2：订单号查找（查）</h2>
+            <form id="selectForm" methon="get">
+                <input type="text" name="BookID">
+                <button type="submit" id="selectLink">查找订单</button>
+            </form>
+        </div>
+
+        <div id="delete" class="item">
+            <h2 >Item3：取消预订(删)</h2>
+            <form id="deleteForm" methon="post">
+                <input type="text" name="BookID">
+                <button type="submit">取消预约</button>
+            </form>
+        </div>
+
+        <div id="update" class="item">
+            <h2 >Item4：修改信息(改)</h2>
+            <form id="updateForm" methon="post">
+                <div>   
+                    <label for="BookID">输入修改的ID</label>
+                    <input type="text" name="BookID" >
+                </div>
+                <div>
+                    <label for="key">输入修改的字段</label>
+                    <input type="text" name="key" >
+                </div>
+                <div>
+                    <label for="value">输入修改后的值</label>
+                    <input type="text" name="value" >
+                </div>
+                <button type="submit" id="updateSub">修改预约</button>
+            </form>
+        </div>
+    </div>
+        
+</div>
+
+<h2>数据面板</h2>
+<div id="tableDiv">
+</div>
+
+
+
+<script>
+        // 监听预订表单提交事件
+        $('#billForm').submit(function(event) {  
+            event.preventDefault(); // 阻止默认提交行为
+    
+            // 获取表单数据
+            var formData = $(this).serialize();
+    
+            // 发送POST请求到服务器
+            $.ajax({
+                url: 'http://127.0.0.1:80/insert', 
+                type: 'POST',
+                data: formData,
+                success: function(res) {
+                    console.log('数据发送成功');
+                    // 在此处可以执行成功后的操作，例如显示成功信息或者重定向到其他页面
+                },
+                error: function(xhr, status, error) {
+                    console.error('数据发送失败:', error);
+                    // 在此处可以执行失败后的操作，例如显示错误信息
+                }
+            });
+        });
+
+        //监听查找表单
+        $('#selectForm').submit(function(event) {
+            event.preventDefault(); // 阻止默认提交行为
+
+            // 获取表单数据
+            var formData = $(this).serialize();
+
+            // 发送GET请求到服务器
+            $.get('http:127.0.0.1:80/selectData?' + formData, function(response) {
+            console.log(response.data[0])
+            });
+        });
+    
+        //监听删除表单
+        $('#deleteForm').submit(function(event) {  
+            event.preventDefault(); // 阻止默认提交行为
+    
+            // 获取表单数据
+            var formData = $(this).serialize();
+    
+            // 发送POST请求到服务器
+            $.ajax({
+                url: 'http://127.0.0.1:80/delete', 
+                type: 'POST',
+                data: formData,
+                success: function(res) {
+                    console.log('数据发送成功');
+                    // 在此处可以执行成功后的操作，例如显示成功信息或者重定向到其他页面
+                },
+                error: function(xhr, status, error) {
+                    console.error('数据发送失败:', error);
+                    // 在此处可以执行失败后的操作，例如显示错误信息
+                }
+            });
+        });
+
+        //监听修改表单
+        $('#updateForm').submit(function(event) {  
+            event.preventDefault(); // 阻止默认提交行为
+    
+            // 获取表单数据
+            var formData = $(this).serialize();
+    
+            // 发送POST请求到服务器
+            $.ajax({
+                url: 'http://127.0.0.1:80/update', 
+                type: 'POST',
+                data: formData,
+                success: function(res) {
+                    console.log('数据发送成功');
+                    // 在此处可以执行成功后的操作，例如显示成功信息或者重定向到其他页面
+                },
+                error: function(xhr, status, error) {
+                    console.error('数据发送失败:', error);
+                    // 在此处可以执行失败后的操作，例如显示错误信息
+                }
+            });
+        });
+
+
+    // 使用 Fetch API 获取查询结果 data
+    fetch('http://127.0.0.1:80/data')
+        .then(response => response.json())
+        .then(dataArr => {
+            generateTable(dataArr.data);
+        })
+        .catch(error => console.error(error));
+
+    function generateTable(data) {
+        // 获取包含表格的div
+        var tableDiv = document.getElementById('tableDiv');
+
+        // 创建table元素
+        var table = document.createElement('table');
+        table.classList.add('table'); // 添加Bootstrap的表格样式类
+
+        // 创建表头
+        var thead = document.createElement('thead');
+        var headerRow = document.createElement('tr');
+        for (var key in data[0]) {
+            if (data[0].hasOwnProperty(key)) {
+                var th = document.createElement('th');
+                th.textContent = key;
+                headerRow.appendChild(th);
+            }
+        }
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        // 创建表格内容
+        var tbody = document.createElement('tbody');
+        data.forEach(function(item) {
+            var row = document.createElement('tr');
+            for (var key in item) {
+                if (item.hasOwnProperty(key)) {
+                    var cell = document.createElement('td');
+                    cell.textContent = item[key];
+                    row.appendChild(cell);
+                }
+            }
+            tbody.appendChild(row);
+        });
+        table.appendChild(tbody);
+
+        // 将表格添加到页面中
+        tableDiv.appendChild(table);
+}
+
+</script>
+
+
+</body></html>
